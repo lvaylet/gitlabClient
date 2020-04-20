@@ -92,4 +92,8 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	// Print GitLab EE configuration, as read from configuration file or environment variable
+	fmt.Println(viper.Get("url"))
+	fmt.Println(viper.Get("personal_access_token"))
 }
