@@ -25,6 +25,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+
+	"github.com/xanzy/go-gitlab"
 )
 
 // rootRunnerJobCmd represents the rootRunnerJob command
@@ -34,6 +36,13 @@ var rootRunnerJobCmd = &cobra.Command{
 	Long:  `Simplify management of Root Runner Jobs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("rootRunnerJob called")
+
+		// TODO Do something more relevant than listing users.
+		// Use GitLab client to list users
+		users, _, err := gitlabClient.Users.ListUsers(&gitlab.ListUsersOptions{})
+		if err == nil {
+			fmt.Println("Found", len(users), "users.")
+		}
 	},
 }
 

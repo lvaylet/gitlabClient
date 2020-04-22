@@ -23,15 +23,19 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+
+	"github.com/xanzy/go-gitlab"
 )
 
 var cfgFile string
+var gitlabClient *gitlab.Client
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -96,4 +100,14 @@ func initConfig() {
 	// Print GitLab EE configuration, as read from configuration file or environment variable
 	fmt.Println(viper.Get("url"))
 	fmt.Println(viper.Get("personal_access_token"))
+
+	// Create a GitLab client and assign it to the package-level variable on success
+	client, err := gitlab.NewClient(
+		viper.GetString("personal_access_token"),
+		gitlab.WithBaseURL(viper.GetString("url")))
+	if err == nil {
+		gitlabClient = client
+	} else {
+		log.Fatalf("Failed to create client: %v", err)
+	}
 }
